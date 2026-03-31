@@ -1,0 +1,28 @@
+name: Build API Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'openapi/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build docs/index.html
+        run: node scripts/build-html.js
+
+      - name: Commit and push docs/index.html
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore: rebuild docs/index.html'
+          file_pattern: 'docs/index.html'
